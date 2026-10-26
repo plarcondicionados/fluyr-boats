@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Lenis */
+/* position relative: o useScroll do Framer mede o hero em relação ao <html> */
+html { scroll-behavior: auto; position: relative; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto !important; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
+.lenis.lenis-stopped { overflow: hidden; }
+
+@layer base {
+  body {
+    @apply bg-mar-900 font-sans text-lona-100 antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection { @apply bg-latao-500 text-mar-900; }
+  :focus-visible { @apply outline outline-2 outline-offset-4 outline-latao-400; }
+}
+
+@layer components {
+  /* Etiqueta mono em caixa alta — o "carimbo" do diário de bordo */
+  .etiqueta {
+    @apply font-mono text-[0.7rem] font-medium uppercase tracking-[0.22em];
+  }
+  .container-bordo {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-10;
+  }
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 text-sm font-semibold transition-all duration-500 ease-luxe;
+  }
+  .btn-latao {
+    @apply btn bg-latao-500 text-mar-900 hover:bg-latao-300 hover:shadow-[0_12px_40px_-12px_rgba(200,148,90,0.7)];
+  }
+  .btn-contorno {
+    @apply btn border border-lona-100/35 text-lona-50 hover:border-latao-300 hover:text-latao-200;
+  }
+  .btn-contorno-escuro {
+    @apply btn border border-mar-900/25 text-mar-900 hover:border-mar-900 hover:bg-mar-900 hover:text-lona-50;
+  }
+  /* Textura de chapa escovada para fundos escuros */
+  .chapa {
+    background-image:
+      repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 7px),
+      radial-gradient(ellipse at 15% 0%, rgba(61, 93, 146, 0.35), transparent 55%),
+      radial-gradient(ellipse at 100% 100%, rgba(200, 148, 90, 0.08), transparent 50%);
+  }
+  /* Trama de lona para fundos claros */
+  .trama {
+    background-color: #f4f0e8;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(11, 22, 40, 0.025) 0 1px, transparent 1px 4px),
+      repeating-linear-gradient(90deg, rgba(11, 22, 40, 0.02) 0 1px, transparent 1px 4px);
+  }
+  .campo {
+    @apply w-full rounded-xl border border-mar-900/15 bg-white/70 px-4 py-3 text-[0.95rem] text-mar-900 placeholder:text-mar-900/40 transition-colors duration-300 focus:border-latao-500 focus:bg-white focus:outline-none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

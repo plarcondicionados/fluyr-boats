@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Organizador de Fotos — Fluyr Boats</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --mar: #0b1628;
+    --mar-2: #13223b;
+    --mar-3: #1d3152;
+    --latao: #c8945a;
+    --latao-claro: #e6bd84;
+    --sinal: #f26a1b;
+    --espuma: #eef1f5;
+    --nevoa: #9fb0c8;
+    --linha: rgba(200, 148, 90, 0.25);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--mar);
+    color: var(--espuma);
+    font-family: Manrope, system-ui, sans-serif;
+    background-image: radial-gradient(circle at 20% 0%, #1a2d4d 0, transparent 45%);
+    min-height: 100vh;
+  }
+  header {
+    position: sticky; top: 0; z-index: 20;
+    display: flex; flex-wrap: wrap; align-items: center; gap: 12px 20px;
+    padding: 12px 20px;
+    background: rgba(11, 22, 40, 0.94);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--linha);
+  }
+  header img { height: 46px; }
+  header h1 { font-family: Fraunces, serif; font-size: 20px; margin: 0; font-weight: 600; }
+  header .mono { font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: .12em; color: var(--latao); text-transform: uppercase; }
+  .acoes { margin-left: auto; display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+  button, select {
+    font: inherit; font-size: 14px; border-radius: 999px; cursor: pointer;
+    border: 1px solid var(--linha); background: var(--mar-2); color: var(--espuma);
+    padding: 8px 14px;
+  }
+  button.primario { background: var(--latao); color: var(--mar); border-color: var(--latao); font-weight: 700; }
+  button.primario:hover { background: var(--latao-claro); }
+  #status { font-size: 13px; color: var(--nevoa); min-width: 120px; }
+  .ajuda {
+    margin: 18px 20px 0; padding: 14px 18px; border: 1px dashed var(--linha); border-radius: 14px;
+    color: var(--nevoa); font-size: 14px; line-height: 1.55;
+  }
+  .ajuda b { color: var(--espuma); }
+  .filtros { display: flex; gap: 8px; margin: 14px 20px 0; flex-wrap: wrap; }
+  .filtros button[aria-pressed="true"] { border-color: var(--latao); color: var(--latao-claro); }
+  main { padding: 6px 20px 80px; }
+  section.raia {
+    margin-top: 18px; border-radius: 16px; background: rgba(19, 34, 59, .7);
+    border: 1px solid var(--linha); padding: 14px;
+  }
+  section.raia.alvo { outline: 2px solid var(--sinal); outline-offset: 2px; }
+  .raia-topo { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
+  .raia-topo h2 { font-family: Fraunces, serif; font-size: 19px; margin: 0; font-weight: 600; }
+  .raia-topo .dica { color: var(--nevoa); font-size: 13px; }
+  .raia-topo .conta { margin-left: auto; font-family: "JetBrains Mono", monospace; font-size: 12px; color: var(--latao); }
+  .grade { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; min-height: 90px; }
+  .vazio { grid-column: 1 / -1; display: grid; place-items: center; color: var(--nevoa); font-size: 13px; border: 1px dashed var(--linha); border-radius: 12px; min-height: 80px; }
+  .card {
+    position: relative; border-radius: 12px; overflow: hidden; background: var(--mar-3);
+    border: 2px solid transparent; cursor: grab; user-select: none;
+    display: flex; flex-direction: column;
+  }
+  .card.arrastando { opacity: .35; }
+  .card.antes { border-left-color: var(--sinal); }
+  .card .foto { position: relative; aspect-ratio: 1; background: #000; }
+  .card .foto img { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+  .card .selo {
+    position: absolute; top: 6px; left: 6px; font-family: "JetBrains Mono", monospace; font-size: 10px;
+    padding: 3px 7px; border-radius: 999px; background: rgba(11,22,40,.85); color: var(--latao-claro);
+  }
+  .card .selo.video { background: var(--sinal); color: #fff; }
+  .card .ampliar {
+    position: absolute; top: 6px; right: 6px; width: 30px; height: 30px; padding: 0;
+    display: grid; place-items: center; background: rgba(11,22,40,.85); font-size: 15px;
+  }
+  .card .info { padding: 8px; display: grid; gap: 6px; }
+  .card .info select { border-radius: 8px; padding: 5px 6px; font-size: 12px; width: 100%; }
+  .card label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--nevoa); cursor: pointer; }
+  .card label input { accent-color: var(--sinal); }
+  .card.limpar { border-color: var(--sinal); }
+  .card .ordem { position: absolute; bottom: 6px; left: 6px; font-family: "JetBrains Mono", monospace; font-size: 11px; background: var(--latao); color: var(--mar); border-radius: 6px; padding: 1px 6px; font-weight: 700; }
+  dialog { border: 0; padding: 0; background: transparent; max-width: 94vw; max-height: 92vh; }
+  dialog::backdrop { background: rgba(3, 8, 16, .9); }
+  dialog img, dialog video { max-width: 94vw; max-height: 84vh; display: block; border-radius: 12px; }
+  dialog .legenda { display: flex; justify-content: space-between; align-items: center; gap: 10px; color: var(--espuma); padding: 10px 2px; font-family: "JetBrains Mono", monospace; font-size: 13px; }
+  @media (max-width: 600px) {
+    header { padding: 10px 16px; }
+    header img { height: 36px; }
+    main, .ajuda, .filtros { margin-left: 16px; margin-right: 16px; padding-left: 0; padding-right: 0; }
+    .grade { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+<header>
+  <img src="/src/assets/marca/logo-fluyr-clara.webp" alt="Fluyr Boats" />
+  <div>
+    <div class="mono">Diário de bordo · organização</div>
+    <h1>Organizador de fotos do site</h1>
+  </div>
+  <div class="acoes">
+    <span id="status" role="status"></span>
+    <button id="restaurar" type="button">Recomeçar</button>
+    <button id="salvar" class="primario" type="button">Salvar organização</button>
+  </div>
+</header>
+
+<div class="ajuda">
+  <b>Como usar:</b> arraste cada foto ou vídeo para a seção do site em que ele deve aparecer (ou use o seletor embaixo de cada item).
+  Dentro de uma seção, a <b>ordem</b> em que você deixar é a ordem do site: solte um item em cima de outro para colocá-lo antes dele.
+  Clique em <b>⤢</b> para ver em tamanho grande ou assistir ao vídeo.
+  Quando terminar, clique em <b>Salvar organização</b>: o site é atualizado na hora (com o site aberto em <code>npm run dev</code>). Vídeos novos levam alguns segundos para serem convertidos.
+</div>
+
+<div class="filtros" role="group" aria-label="Filtrar">
+  <button type="button" data-filtro="todos" aria-pressed="true">Tudo</button>
+  <button type="button" data-filtro="foto" aria-pressed="false">Só fotos</button>
+  <button type="button" data-filtro="video" aria-pressed="false">Só vídeos</button>
+</div>
+
+<main id="raias"></main>
+
+<dialog id="visor">
+  <div id="visor-midia"></div>
+  <div class="legenda"><span id="visor-nome"></span><button type="button" id="fechar">Fechar ✕</button></div>
+</dialog>
+
+<script>
+const SECOES = [
+  { id: "organizar", nome: "A organizar", dica: "Tudo começa aqui. Arraste para as seções abaixo." },
+  { id: "destaque", nome: "Destaque (abertura do site)", dica: "1 a 3 itens. Vídeo do drone fica ótimo aqui." },
+  { id: "fluyr-x", nome: "Fluyr X 850", dica: "A chalana azul e laranja de 8,5 m com o X iluminado." },
+  { id: "fluyr-950", nome: "Fluyr 950", dica: "O pontoon preto de 9,5 m." },
+  { id: "acessorios", nome: "Convés & acessórios", dica: "Bar de acrílico, churrasqueira, estofados, timão…" },
+  { id: "estaleiro", nome: "Do estaleiro à água (bastidores)", dica: "Solda, flutuadores, montagem, projeto 3D." },
+  { id: "galeria", nome: "Galeria geral", dica: "Fotos extras para a galeria." },
+  { id: "nao-usar", nome: "Não usar", dica: "Fica fora do site." },
+];
+
+const itens = [];
+for (let i = 1; i <= 35; i++) {
+  const n = String(i).padStart(2, "0");
+  itens.push({ id: `foto-${n}`, tipo: "foto", thumb: `/organizador/thumbs/foto-${n}.jpg`, arquivo: `/fotos-originais/foto-${n}.jpg` });
+}
+for (let i = 1; i <= 35; i++) {
+  const n = String(i).padStart(2, "0");
+  itens.push({ id: `video-${n}`, tipo: "video", thumb: `/organizador/thumbs/video-${n}.jpg`, arquivo: `/fotos-originais/video-${n}.mp4` });
+}
+const porId = Object.fromEntries(itens.map((i) => [i.id, i]));
+
+let estado = estadoInicial();
+let filtro = "todos";
+let arrastado = null;
+
+function estadoInicial() {
+  const secoes = Object.fromEntries(SECOES.map((s) => [s.id, []]));
+  secoes.organizar = itens.map((i) => i.id);
+  return { secoes };
+}
+
+function normalizar(e) {
+  // garante que todo item aparece exatamente uma vez
+  const vistos = new Set();
+  const secoes = Object.fromEntries(SECOES.map((s) => [s.id, []]));
+  for (const s of SECOES) {
+    for (const id of (e?.secoes?.[s.id] || [])) {
+      if (porId[id] && !vistos.has(id)) { secoes[s.id].push(id); vistos.add(id); }
+    }
+  }
+  for (const i of itens) if (!vistos.has(i.id)) secoes.organizar.push(i.id);
+  return { secoes };
+}
+
+function guardarLocal() {
+  try { localStorage.setItem("fluyr-organizacao", JSON.stringify(estado)); } catch {}
+  status("Alterações não salvas");
+}
+
+function status(t) { document.getElementById("status").textContent = t; }
+
+function mover(id, destino, antesDe = null) {
+  for (const s of SECOES) {
+    const l = estado.secoes[s.id];
+    const k = l.indexOf(id);
+    if (k >= 0) l.splice(k, 1);
+  }
+  const lista = estado.secoes[destino];
+  const pos = antesDe ? lista.indexOf(antesDe) : -1;
+  if (pos >= 0) lista.splice(pos, 0, id); else lista.push(id);
+  guardarLocal();
+  render();
+}
+
+function render() {
+  const raiz = document.getElementById("raias");
+  raiz.innerHTML = "";
+  for (const s of SECOES) {
+    const sec = document.createElement("section");
+    sec.className = "raia";
+    sec.dataset.secao = s.id;
+    const lista = estado.secoes[s.id];
+    sec.innerHTML = `<div class="raia-topo"><h2>${s.nome}</h2><span class="dica">${s.dica}</span><span class="conta">${lista.length} ${lista.length === 1 ? "item" : "itens"}</span></div>`;
+    const grade = document.createElement("div");
+    grade.className = "grade";
+    const visiveis = lista.filter((id) => filtro === "todos" || porId[id].tipo === filtro);
+    if (!visiveis.length) grade.innerHTML = `<div class="vazio">Solte aqui</div>`;
+    visiveis.forEach((id) => grade.appendChild(card(id, s.id, lista.indexOf(id) + 1)));
+    sec.appendChild(grade);
+
+    sec.addEventListener("dragover", (ev) => { ev.preventDefault(); sec.classList.add("alvo"); });
+    sec.addEventListener("dragleave", (ev) => { if (!sec.contains(ev.relatedTarget)) sec.classList.remove("alvo"); });
+    sec.addEventListener("drop", (ev) => {
+      ev.preventDefault();
+      sec.classList.remove("alvo");
+      const alvo = ev.target.closest(".card");
+      if (arrastado) mover(arrastado, s.id, alvo && alvo.dataset.id !== arrastado ? alvo.dataset.id : null);
+    });
+    raiz.appendChild(sec);
+  }
+}
+
+function card(id, secao, ordem) {
+  const it = porId[id];
+  const el = document.createElement("article");
+  el.className = "card";
+  el.draggable = true;
+  el.dataset.id = id;
+  const opcoes = SECOES.map((s) => `<option value="${s.id}" ${s.id === secao ? "selected" : ""}>${s.nome}</option>`).join("");
+  el.innerHTML = `
+    <div class="foto">
+      <img src="${it.thumb}" alt="${id}" loading="lazy" />
+      <span class="selo ${it.tipo === "video" ? "video" : ""}">${it.tipo === "video" ? "▶ " : ""}${id}</span>
+      <button class="ampliar" type="button" aria-label="Ver ${id} em tamanho grande">⤢</button>
+      ${secao !== "organizar" && secao !== "nao-usar" ? `<span class="ordem">${ordem}º</span>` : ""}
+    </div>
+    <div class="info">
+      <select aria-label="Seção de ${id}">${opcoes}</select>
+    </div>`;
+  el.addEventListener("dragstart", (ev) => { arrastado = id; el.classList.add("arrastando"); ev.dataTransfer.effectAllowed = "move"; ev.dataTransfer.setData("text/plain", id); });
+  el.addEventListener("dragend", () => { arrastado = null; el.classList.remove("arrastando"); });
+  el.addEventListener("dragover", () => el.classList.add("antes"));
+  el.addEventListener("dragleave", () => el.classList.remove("antes"));
+  el.querySelector("select").addEventListener("change", (ev) => mover(id, ev.target.value));
+  el.querySelector(".ampliar").addEventListener("click", () => abrir(id));
+  return el;
+}
+
+function abrir(id) {
+  const it = porId[id];
+  const area = document.getElementById("visor-midia");
+  area.innerHTML = it.tipo === "video"
+    ? `<video src="${it.arquivo}" controls autoplay playsinline></video>`
+    : `<img src="${it.arquivo}" alt="${id}" />`;
+  document.getElementById("visor-nome").textContent = id;
+  document.getElementById("visor").showModal();
+}
+document.getElementById("fechar").addEventListener("click", () => document.getElementById("visor").close());
+document.getElementById("visor").addEventListener("close", () => { document.getElementById("visor-midia").innerHTML = ""; });
+document.getElementById("visor").addEventListener("click", (ev) => { if (ev.target.id === "visor") ev.target.close(); });
+
+document.querySelectorAll("[data-filtro]").forEach((b) => b.addEventListener("click", () => {
+  filtro = b.dataset.filtro;
+  document.querySelectorAll("[data-filtro]").forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+  render();
+}));
+
+document.getElementById("salvar").addEventListener("click", async () => {
+  status("Salvando…");
+  try {
+    const resposta = await fetch("/api/organizacao", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ salvoEm: new Date().toISOString(), ...estado }),
+    });
+    if (!resposta.ok) throw new Error();
+    status("✓ Salvo — o site já foi atualizado");
+  } catch {
+    status("Não consegui salvar. O servidor está rodando?");
+  }
+});
+
+document.getElementById("restaurar").addEventListener("click", () => {
+  if (!confirm("Voltar todas as fotos para “A organizar”?")) return;
+  estado = estadoInicial();
+  guardarLocal();
+  render();
+});
+
+(async function iniciar() {
+  let salvo = null;
+  try { salvo = await (await fetch("/api/organizacao")).json(); } catch {}
+  if (!salvo) { try { salvo = JSON.parse(localStorage.getItem("fluyr-organizacao")); } catch {} }
+  estado = normalizar(salvo || estadoInicial());
+  render();
+  status(salvo ? "Organização carregada" : "");
+})();
+</script>
+</body>
+</html>
