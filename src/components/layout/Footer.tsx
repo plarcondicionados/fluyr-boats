@@ -17,7 +17,7 @@ export const Footer = () => {
           <div>
             <img src={logo} alt="Fluyr Boats by Voa Menina" width={640} height={381} loading="lazy" className="h-24 w-auto" />
             <p className="mt-5 max-w-sm text-sm leading-relaxed text-nevoa">
-              Estaleiro de chalanas e pontoons em {company.city}/{company.state}. Barcos feitos à mão, para reunir gente na água.
+              Estaleiro de flutuantes e pontoons em {company.city}/{company.state}. Barcos feitos à mão, para reunir gente na água.
             </p>
             <p className="etiqueta mt-6 text-latao-400/80">{company.coordinates}</p>
           </div>

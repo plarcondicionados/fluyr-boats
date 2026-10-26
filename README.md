@@ -1,6 +1,6 @@
 # Fluyr Boats — site institucional
 
-Site de uma página da **Fluyr Boats by Voa Menina**, estaleiro de chalanas e pontoons em Ribeirão Preto/SP.
+Site de uma página da **Fluyr Boats by Voa Menina**, estaleiro de flutuantes e pontoons em Ribeirão Preto/SP.
 Feito com Vite + React + TypeScript + Tailwind + Framer Motion + Lenis. Não tem servidor nem banco de dados: o contato acontece pelo WhatsApp.
 
 ## Comandos

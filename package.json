@@ -3,7 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Site institucional — Fluyr Boats, estaleiro de chalanas e pontoons em Ribeirão Preto/SP",
+  "description": "Site institucional — Fluyr Boats, estaleiro de flutuantes e pontoons em Ribeirão Preto/SP",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",

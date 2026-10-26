@@ -23,15 +23,15 @@ export const modelos: Modelo[] = [
   {
     id: 'fluyr-x',
     nome: 'Fluyr X 850',
-    tipo: 'Chalana',
+    tipo: 'Flutuante',
     comprimento: '8,5 m',
     registro: 'X·850',
-    chamada: 'A chalana que assina o próprio nome no céu.',
+    chamada: 'O flutuante que assina o próprio nome no céu.',
     descricao:
       'O grande X estrutural sustenta o toldo e vira assinatura: contornado por LED, ele acende ao entardecer e transforma o barco num ponto de encontro na represa. A bordo, bar com banquetas, convés amplo e o casco em azul-marinho com a faixa laranja sinalizadora.',
     ficha: [
       { item: 'Comprimento', valor: '8,5 m' },
-      { item: 'Tipo', valor: 'Chalana' },
+      { item: 'Tipo', valor: 'Flutuante' },
       { item: 'Toldo', valor: 'Rígido, sustentado pelo X estrutural' },
       { item: 'Iluminação', valor: 'LED no X, no toldo e letreiro Fluyr' },
       { item: 'Capacidade', valor: 'Até 23 pessoas' },

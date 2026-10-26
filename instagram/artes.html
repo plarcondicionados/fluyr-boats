@@ -1,0 +1,268 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<title>Artes Instagram — Fluyr Boats</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=JetBrains+Mono:wght@500&family=Manrope:wght@400;500;600;700&display=block" rel="stylesheet" />
+<style>
+  /* Cada arte é um quadro 1080×1350 (formato retrato do feed). Uso: artes.html?p=<id> */
+  :root {
+    --mar: #0b1628; --mar-2: #13223b; --mar-3: #1d3152;
+    --latao: #c8945a; --latao-claro: #e6bd84; --latao-escuro: #7e5530;
+    --sinal: #f26a1b; --lona: #f4f0e8; --lona-2: #e8e1d3; --nevoa: #9fb0c8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1350px; overflow: hidden; background: var(--mar); }
+  body { font-family: Manrope, sans-serif; -webkit-font-smoothing: antialiased; }
+  .arte { position: relative; width: 1080px; height: 1350px; overflow: hidden; }
+  .etiqueta { font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: .22em; text-transform: uppercase; }
+  .display { font-family: Fraunces, serif; font-weight: 500; letter-spacing: -0.02em; line-height: 1.02; }
+
+  /* moldura comum */
+  .topo { position: absolute; top: 64px; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: center; z-index: 5; }
+  .rodape { position: absolute; bottom: 60px; left: 72px; right: 72px; display: flex; justify-content: space-between; align-items: flex-end; z-index: 5; }
+  .rodape img { height: 92px; }
+  .arroba { font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: .12em; }
+  .traco { display: inline-block; width: 56px; height: 2px; background: currentColor; vertical-align: middle; margin-right: 18px; opacity: .7; }
+
+  /* foto de fundo */
+  .foto { position: absolute; inset: 0; background-size: cover; background-position: center; }
+  .veu { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(6,13,25,.55) 0%, rgba(6,13,25,0) 26%, rgba(6,13,25,0) 42%, rgba(6,13,25,.88) 74%, rgba(6,13,25,.97) 100%); }
+  .texto-foto { position: absolute; left: 72px; right: 72px; bottom: 210px; color: var(--lona); z-index: 4; }
+  .texto-foto .etiqueta { color: var(--latao-claro); margin-bottom: 28px; }
+  .texto-foto h1 { font-size: 96px; }
+  .texto-foto h1 em { color: var(--latao-claro); }
+  .texto-foto p { margin-top: 30px; font-size: 34px; line-height: 1.4; color: rgba(244,240,232,.86); max-width: 860px; }
+
+  /* fundos */
+  .chapa { background-color: var(--mar);
+    background-image: repeating-linear-gradient(90deg, rgba(255,255,255,.02) 0 1px, transparent 1px 9px),
+      radial-gradient(ellipse at 10% 0%, rgba(61,93,146,.45), transparent 55%),
+      radial-gradient(ellipse at 100% 100%, rgba(200,148,90,.12), transparent 55%); }
+  .trama { background-color: var(--lona);
+    background-image: repeating-linear-gradient(0deg, rgba(11,22,40,.03) 0 1px, transparent 1px 5px),
+      repeating-linear-gradient(90deg, rgba(11,22,40,.025) 0 1px, transparent 1px 5px); }
+
+  /* ficha técnica */
+  .registro { font-family: Fraunces, serif; font-weight: 600; font-size: 250px; line-height: .85; letter-spacing: -0.05em; }
+  .ficha { list-style: none; margin-top: 40px; border-top: 2px dashed rgba(200,148,90,.35); }
+  .ficha li { display: flex; justify-content: space-between; gap: 30px; padding: 24px 0; border-bottom: 2px dashed rgba(200,148,90,.35); font-size: 32px; }
+  .ficha li span:first-child { color: var(--nevoa); }
+  .ficha li span:last-child { font-weight: 700; color: var(--lona); text-align: right; }
+
+  .chip { display: inline-block; border-radius: 999px; padding: 12px 26px; font-size: 24px; font-weight: 700; }
+  .cta-whats { display: inline-flex; align-items: center; gap: 18px; background: #25D366; color: white; border-radius: 999px; padding: 22px 38px; font-size: 32px; font-weight: 700; }
+  .cta-whats svg { width: 40px; height: 40px; fill: white; }
+  .seta { position: absolute; right: 72px; bottom: 210px; z-index: 6; font-family: "JetBrains Mono", monospace; font-size: 22px; letter-spacing: .2em; color: var(--latao-claro); }
+</style>
+</head>
+<body>
+<div id="raiz"></div>
+<script>
+const F = (id) => `../src/assets/fotos/${id}.webp`;
+const LOGO_CLARA = '../src/assets/marca/logo-fluyr-clara.webp';
+const LOGO = '../src/assets/marca/logo-fluyr.webp';
+const WHATS_SVG = '<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884a9.82 9.82 0 016.988 2.896 9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.885-9.885 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.359.101 11.945c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.652a11.94 11.94 0 005.71 1.454h.006c6.585 0 11.946-5.36 11.949-11.945a11.86 11.86 0 00-3.48-8.408"/></svg>';
+
+/* ---------- moldes ---------- */
+const topo = (esq, dir, cor) => `<div class="topo etiqueta" style="color:${cor}"><span><span class="traco"></span>${esq}</span><span>${dir}</span></div>`;
+const rodapeEscuro = () => `<div class="rodape"><img src="${LOGO_CLARA}" alt=""><span class="arroba" style="color:rgba(244,240,232,.75)">@fluyrboats</span></div>`;
+const rodapeClaro = () => `<div class="rodape"><img src="${LOGO}" alt=""><span class="arroba" style="color:rgba(11,22,40,.6)">@fluyrboats</span></div>`;
+
+const fotoTitulo = ({ foto, pos = 'center', esq, dir, kicker, titulo, texto, seta }) => `
+  <div class="arte">
+    <div class="foto" style="background-image:url(${F(foto)});background-position:${pos}"></div>
+    <div class="veu"></div>
+    ${topo(esq, dir, 'rgba(244,240,232,.9)')}
+    <div class="texto-foto">
+      ${kicker ? `<p class="etiqueta">${kicker}</p>` : ''}
+      <h1 class="display">${titulo}</h1>
+      ${texto ? `<p>${texto}</p>` : ''}
+    </div>
+    ${seta ? `<div class="seta">Arraste →</div>` : ''}
+    ${rodapeEscuro()}
+  </div>`;
+
+const ficha = ({ registro, cor, esq, dir, nome, tipo, itens, foto, pos = 'center' }) => `
+  <div class="arte chapa">
+    ${topo(esq, dir, 'var(--latao-claro)')}
+    <div style="position:absolute;top:170px;left:72px;right:72px;color:var(--lona)">
+      <div class="registro" style="color:${cor}">${registro}</div>
+      <h1 class="display" style="font-size:80px;margin-top:26px">${nome}</h1>
+      <p class="etiqueta" style="color:var(--latao-claro);margin-top:18px">${tipo}</p>
+      <ul class="ficha">${itens.map(([a, b]) => `<li><span>${a}</span><span>${b}</span></li>`).join('')}</ul>
+    </div>
+    <div style="position:absolute;right:72px;top:150px;width:290px;height:290px;border-radius:28px;background:url(${F(foto)}) ${pos}/cover;border:3px solid rgba(200,148,90,.5);box-shadow:0 30px 60px -30px rgba(0,0,0,.8)"></div>
+    <div class="seta" style="bottom:90px">Arraste →</div>
+    <div class="rodape"><img src="${LOGO_CLARA}" alt=""></div>
+  </div>`;
+
+const fotoCta = ({ foto, pos = 'center', esq, dir, kicker, titulo, texto, endereco }) => `
+  <div class="arte">
+    <div class="foto" style="background-image:url(${F(foto)});background-position:${pos}"></div>
+    <div class="veu" style="background:linear-gradient(180deg, rgba(6,13,25,.55) 0%, rgba(6,13,25,0) 22%, rgba(6,13,25,.35) 45%, rgba(6,13,25,.95) 70%, rgba(6,13,25,.98) 100%)"></div>
+    ${topo(esq, dir, 'rgba(244,240,232,.9)')}
+    <div class="texto-foto" style="bottom:200px">
+      ${kicker ? `<p class="etiqueta">${kicker}</p>` : ''}
+      <h1 class="display" style="font-size:88px">${titulo}</h1>
+      ${texto ? `<p>${texto}</p>` : ''}
+      <div style="margin-top:44px;display:flex;align-items:center;gap:30px;flex-wrap:wrap">
+        <span class="cta-whats">${WHATS_SVG} (16) 99715-3724</span>
+      </div>
+      ${endereco ? `<p class="etiqueta" style="margin-top:34px;color:rgba(244,240,232,.7);font-size:20px">${endereco}</p>` : ''}
+    </div>
+    ${rodapeEscuro()}
+  </div>`;
+
+const tipografico = ({ esq, dir, kicker, titulo, texto, desenho = '', notas = '' }) => `
+  <div class="arte trama">
+    ${topo(esq, dir, 'var(--latao-escuro)')}
+    <div style="position:absolute;top:180px;left:72px;right:72px;color:var(--mar)">
+      ${kicker ? `<p class="etiqueta" style="color:var(--latao-escuro)">${kicker}</p>` : ''}
+      <h1 class="display" style="font-size:100px;margin-top:26px">${titulo}</h1>
+      ${texto ? `<p style="margin-top:30px;font-size:33px;line-height:1.45;color:rgba(11,22,40,.72);max-width:900px">${texto}</p>` : ''}
+    </div>
+    ${desenho}
+    ${notas}
+    ${rodapeClaro()}
+  </div>`;
+
+/* ---------- desenhos (SVG) ---------- */
+const desenhoBordos = `
+  <svg viewBox="0 0 936 560" style="position:absolute;left:72px;top:620px;width:936px;height:560px">
+    <defs><marker id="m" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#7e5530"/></marker></defs>
+    <path d="M468 30 C 560 110 590 200 590 300 L 590 500 Q 590 530 560 530 L 376 530 Q 346 530 346 500 L 346 300 C 346 200 376 110 468 30Z" fill="#0b1628"/>
+    <path d="M468 70 C 540 135 562 210 562 300 L 562 490 L 374 490 L 374 300 C 374 210 396 135 468 70Z" fill="none" stroke="#c8945a" stroke-width="3" stroke-dasharray="8 8"/>
+    <circle cx="346" cy="240" r="20" fill="#e5383b"/><circle cx="346" cy="240" r="34" fill="#e5383b" opacity=".25"/>
+    <circle cx="590" cy="240" r="20" fill="#2bb673"/><circle cx="590" cy="240" r="34" fill="#2bb673" opacity=".25"/>
+    <text x="468" y="20" text-anchor="middle" font-family="JetBrains Mono" font-size="20" fill="#7e5530" letter-spacing="4">PROA ↑</text>
+    <line x1="290" y1="240" x2="150" y2="240" stroke="#7e5530" stroke-width="3" marker-end="url(#m)"/>
+    <line x1="646" y1="240" x2="786" y2="240" stroke="#7e5530" stroke-width="3" marker-end="url(#m)"/>
+    <text x="40" y="320" font-family="Fraunces" font-size="54" fill="#0b1628">Bombordo</text>
+    <text x="40" y="362" font-family="Manrope" font-size="26" fill="#e5383b" font-weight="700">luz vermelha · esquerda</text>
+    <text x="896" y="320" text-anchor="end" font-family="Fraunces" font-size="54" fill="#0b1628">Boreste</text>
+    <text x="896" y="362" text-anchor="end" font-family="Manrope" font-size="26" fill="#2bb673" font-weight="700">luz verde · direita</text>
+  </svg>`;
+
+const desenhoProaPopa = `
+  <svg viewBox="0 0 936 520" style="position:absolute;left:72px;top:640px;width:936px;height:520px">
+    <defs><marker id="m2" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 10 5 0 10z" fill="#7e5530"/></marker></defs>
+    <path d="M60 330 Q 80 300 140 300 L 860 300 L 860 330 Z" fill="#0b1628"/>
+    <rect x="120" y="230" width="720" height="70" rx="6" fill="#13223b"/>
+    <rect x="120" y="248" width="720" height="16" fill="#c8945a" opacity=".85"/>
+    <path d="M220 230 L 220 120 M 520 230 L 520 120 M 220 120 Q 370 70 640 110" stroke="#9fb0c8" stroke-width="6" fill="none"/>
+    <path d="M200 125 Q 380 60 660 112 L 660 128 Q 380 80 200 141Z" fill="#0b1628"/>
+    <ellipse cx="460" cy="345" rx="390" ry="28" fill="#9fb0c8" opacity=".55"/>
+    <rect x="845" y="250" width="34" height="120" rx="8" fill="#1d3152"/><rect x="838" y="235" width="48" height="40" rx="10" fill="#0b1628"/>
+    <path d="M0 385 Q 60 365 120 385 T 240 385 T 360 385 T 480 385 T 600 385 T 720 385 T 840 385 T 936 385" stroke="#3d5d92" stroke-width="5" fill="none" opacity=".6"/>
+    <line x1="260" y1="478" x2="60" y2="478" stroke="#7e5530" stroke-width="3" marker-end="url(#m2)"/>
+    <line x1="676" y1="478" x2="876" y2="478" stroke="#7e5530" stroke-width="3" marker-end="url(#m2)"/>
+    <text x="60" y="458" font-family="Fraunces" font-size="54" fill="#0b1628">Proa</text>
+    <text x="876" y="458" text-anchor="end" font-family="Fraunces" font-size="54" fill="#0b1628">Popa</text>
+    <text x="60" y="515" font-family="Manrope" font-size="26" fill="#7e5530" font-weight="700">a frente</text>
+    <text x="876" y="515" text-anchor="end" font-family="Manrope" font-size="26" fill="#7e5530" font-weight="700">a traseira · motor de popa</text>
+  </svg>`;
+
+const desenhoFlutuantePontoon = `
+  <svg viewBox="0 0 936 480" style="position:absolute;left:72px;top:660px;width:936px;height:480px">
+    <!-- flutuante: casco de fundo chato -->
+    <path d="M40 130 L 420 130 L 390 230 L 70 230 Z" fill="#0b1628"/>
+    <rect x="60" y="112" width="340" height="18" fill="#f26a1b"/>
+    <path d="M0 200 Q 50 185 100 200 T 200 200 T 300 200 T 400 200 T 460 200" stroke="#3d5d92" stroke-width="5" fill="none" opacity=".6"/>
+    <text x="230" y="300" text-anchor="middle" font-family="Fraunces" font-size="54" fill="#0b1628">Flutuante</text>
+    <text x="230" y="345" text-anchor="middle" font-family="Manrope" font-size="25" fill="rgba(11,22,40,.7)">casco de fundo chato,</text>
+    <text x="230" y="380" text-anchor="middle" font-family="Manrope" font-size="25" fill="rgba(11,22,40,.7)">largo e estável</text>
+    <text x="230" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="20" letter-spacing="3" fill="#7e5530">FLUYR X 850</text>
+    <line x1="468" y1="40" x2="468" y2="440" stroke="#c8945a" stroke-width="2" stroke-dasharray="8 8"/>
+    <!-- pontoon: convés sobre flutuadores -->
+    <rect x="520" y="110" width="380" height="30" rx="4" fill="#0b1628"/>
+    <rect x="540" y="140" width="340" height="12" fill="#9fb0c8"/>
+    <rect x="550" y="152" width="320" height="44" rx="22" fill="#9fb0c8"/>
+    <rect x="550" y="152" width="320" height="44" rx="22" fill="none" stroke="#1d3152" stroke-width="3"/>
+    <path d="M476 200 Q 526 185 576 200 T 676 200 T 776 200 T 876 200 T 936 200" stroke="#3d5d92" stroke-width="5" fill="none" opacity=".6"/>
+    <text x="710" y="300" text-anchor="middle" font-family="Fraunces" font-size="54" fill="#0b1628">Pontoon</text>
+    <text x="710" y="345" text-anchor="middle" font-family="Manrope" font-size="25" fill="rgba(11,22,40,.7)">convés amplo sobre</text>
+    <text x="710" y="380" text-anchor="middle" font-family="Manrope" font-size="25" fill="rgba(11,22,40,.7)">flutuadores tubulares</text>
+    <text x="710" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="20" letter-spacing="3" fill="#7e5530">FLUYR 950</text>
+  </svg>`;
+
+/* ---------- as artes ---------- */
+const ARTES = {
+  // Post 1 — apresentação
+  'p01': () => `
+    <div class="arte">
+      <div class="foto" style="background-image:url(${F('foto-28')});background-position:center 60%"></div>
+      <div class="veu" style="background:linear-gradient(180deg, rgba(6,13,25,.92) 0%, rgba(6,13,25,.55) 28%, rgba(6,13,25,.15) 45%, rgba(6,13,25,.15) 55%, rgba(6,13,25,.92) 82%, rgba(6,13,25,.98) 100%)"></div>
+      ${topo('Diário de bordo', 'Nº 01', 'rgba(244,240,232,.9)')}
+      <img src="${LOGO_CLARA}" alt="" style="position:absolute;top:150px;left:50%;transform:translateX(-50%);width:560px">
+      <div class="texto-foto" style="bottom:150px;text-align:center">
+        <p class="etiqueta">Ribeirão Preto · SP</p>
+        <h1 class="display" style="font-size:84px">Prazer, somos a <em>Fluyr Boats.</em></h1>
+        <p style="margin:28px auto 0">Flutuantes e pontoons construídos peça a peça no nosso estaleiro — para reunir gente na água.</p>
+      </div>
+    </div>`,
+
+  // Post 2 — glossário: flutuante x pontoon
+  'p02': () => tipografico({
+    esq: 'Glossário de bordo', dir: 'Nº 02', kicker: 'Você sabe a diferença?',
+    titulo: 'Flutuante <em style="color:var(--latao-escuro)">ou</em> pontoon?',
+    texto: 'Os dois são feitos para passeio e lazer em grupo — o que muda é o que fica embaixo do convés.',
+    desenho: desenhoFlutuantePontoon,
+  }),
+
+  // Post 3 — carrossel Fluyr X 850
+  'p03-1': () => fotoTitulo({ foto: 'foto-16', pos: 'center', esq: 'A frota', dir: '01 / 04', kicker: 'X 850 · flutuante · 8,5 m', titulo: 'O flutuante que assina o próprio nome <em>no céu.</em>', seta: true }),
+  'p03-2': () => ficha({ registro: 'X·850', cor: 'var(--sinal)', esq: 'Ficha técnica', dir: '02 / 04', nome: 'Fluyr X 850', tipo: 'Flutuante', foto: 'foto-19',
+      itens: [['Comprimento', '8,5 m'], ['Capacidade', 'até 23 pessoas'], ['Toldo', 'rígido, sustentado pelo X'], ['Iluminação', 'LED no X e no toldo'], ['A bordo', 'bar com banquetas']] }),
+  'p03-3': () => fotoTitulo({ foto: 'foto-23', pos: 'center', esq: 'Fluyr X 850', dir: '03 / 04', kicker: 'Convés', titulo: 'Bar, banquetas e <em>luz no forro.</em>', texto: 'O espaço foi desenhado para a conversa não acabar quando o sol se põe.', seta: true }),
+  'p03-4': () => fotoCta({ foto: 'foto-12', pos: 'center 40%', esq: 'Fluyr X 850', dir: '04 / 04', kicker: 'Ao entardecer', titulo: 'O X acende. <em>A festa começa.</em>', texto: 'Quer a sua? Chama a gente no WhatsApp.' }),
+
+  // Post 4 — glossário: bombordo x boreste
+  'p04': () => tipografico({
+    esq: 'Glossário de bordo', dir: 'Nº 04', kicker: 'Lado esquerdo, lado direito',
+    titulo: 'Bombordo <em style="color:var(--latao-escuro)">e</em> boreste.',
+    texto: 'Olhando para a proa, a esquerda é bombordo e a direita é boreste. À noite, as luzes de navegação mostram o lado de cada barco.',
+    desenho: desenhoBordos,
+  }),
+
+  // Post 5 — bastidores
+  'p05': () => fotoTitulo({ foto: 'foto-14', pos: 'center 55%', esq: 'Do estaleiro', dir: 'Nº 05', kicker: 'Bastidores', titulo: 'Antes de navegar, <em>ele passou por aqui.</em>', texto: 'Cada arco do X é cortado, soldado e iluminado no nosso galpão em Ribeirão Preto.' }),
+
+  // Post 6 — manifesto
+  'p06': () => `
+    <div class="arte chapa">
+      ${topo('Diário de bordo', 'Nº 06', 'var(--latao-claro)')}
+      <div style="position:absolute;top:50%;left:72px;right:72px;transform:translateY(-55%);color:var(--lona)">
+        <p class="display" style="font-size:260px;color:var(--latao);line-height:.6;height:120px">“</p>
+        <h1 class="display" style="font-size:118px">Barco bom é aquele que <em style="color:var(--latao-claro)">junta gente.</em></h1>
+        <div style="margin-top:56px;height:2px;width:160px;background:var(--latao)"></div>
+        <p style="margin-top:34px;font-size:32px;line-height:1.45;color:var(--nevoa);max-width:820px">Conversa, música, churrasco e fim de tarde na represa. É para isso que cada Fluyr é construída.</p>
+      </div>
+      ${rodapeEscuro()}
+    </div>`,
+
+  // Post 7 — carrossel Fluyr 950
+  'p07-1': () => fotoTitulo({ foto: 'foto-30', pos: 'center', esq: 'A frota', dir: '01 / 04', kicker: 'Fluyr 950 · pontoon · 9,5 m', titulo: 'Uma sala de estar <em>inteira flutuando.</em>', seta: true }),
+  'p07-2': () => ficha({ registro: '950', cor: 'var(--latao)', esq: 'Ficha técnica', dir: '02 / 04', nome: 'Fluyr 950', tipo: 'Pontoon sobre flutuadores', foto: 'foto-34',
+      itens: [['Comprimento', '9,5 m'], ['Capacidade', 'até 30 pessoas'], ['Toldo', 'bimini em lona'], ['Convés', 'sofás em U e mesas'], ['A bordo', 'bar e churrasqueira inox']] }),
+  'p07-3': () => fotoTitulo({ foto: 'foto-33', pos: 'center 60%', esq: 'Fluyr 950', dir: '03 / 04', kicker: 'Convés', titulo: 'Lugar para a <em>turma toda.</em>', texto: 'Sofás em U, mesa no centro e o bimini garantindo a sombra do meio-dia.', seta: true }),
+  'p07-4': () => fotoCta({ foto: 'foto-27', pos: 'center', esq: 'Fluyr 950', dir: '04 / 04', kicker: 'Escada de popa', titulo: 'Do convés <em>direto para a água.</em>', texto: 'Quer a sua? Chama a gente no WhatsApp.' }),
+
+  // Post 8 — glossário: proa x popa
+  'p08': () => tipografico({
+    esq: 'Glossário de bordo', dir: 'Nº 08', kicker: 'Frente e trás',
+    titulo: 'Proa <em style="color:var(--latao-escuro)">e</em> popa.',
+    texto: 'Proa é a frente da embarcação. Popa é a parte de trás — onde fica o motor de popa (daí o nome).',
+    desenho: desenhoProaPopa,
+  }),
+
+  // Post 9 — chamada para contato
+  'p09': () => fotoCta({ foto: 'foto-31', pos: 'center', esq: 'Rumo ao contato', dir: 'Nº 09', kicker: 'Vamos traçar a rota?', titulo: 'Seu barco começa com <em>uma conversa.</em>', texto: 'Conte como você imagina o seu convés. A gente desenha junto.', endereco: 'Estaleiro · Rua João Guião, 133 · Ribeirão Preto/SP' }),
+};
+
+const id = new URLSearchParams(location.search).get('p') || 'p01';
+document.getElementById('raiz').innerHTML = (ARTES[id] || ARTES.p01)();
+window.ARTES_IDS = Object.keys(ARTES);
+</script>
+</body>
+</html>

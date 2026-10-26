@@ -6,7 +6,7 @@
 export const company = {
   name: 'Fluyr Boats',
   signature: 'by Voa Menina',
-  tagline: 'Chalanas e pontoons feitos sob medida',
+  tagline: 'Flutuantes e pontoons feitos sob medida',
   city: 'Ribeirão Preto',
   state: 'SP',
   /** Coordenadas aproximadas de Ribeirão Preto — usadas como "posição" decorativa no diário de bordo. */
@@ -46,8 +46,8 @@ export const hero = {
   kicker: 'Estaleiro · Ribeirão Preto/SP',
   title: ['Feitos para singrar.', 'Desenhados para reunir.'],
   text:
-    'Chalanas e pontoons construídos peça a peça no nosso estaleiro — do primeiro traço do projeto ao dia em que o barco toca a água pela primeira vez.',
-  primaryCta: 'Conhecer a frota',
+    'Flutuantes e pontoons construídos peça a peça no nosso estaleiro — do primeiro traço do projeto ao dia em que o barco toca a água pela primeira vez.',
+  primaryCta: 'Conheça nossos flutuantes e pontoons',
   secondaryCta: 'Chamar no WhatsApp',
 }
 
@@ -55,7 +55,7 @@ export const about = {
   kicker: 'Nº 00 — Diário de bordo',
   title: 'Um estaleiro no interior, com a cabeça na água.',
   paragraphs: [
-    'A Fluyr Boats nasceu da Voa Menina com uma ideia simples: barco bom é aquele que junta gente. Por isso cada chalana e cada pontoon que sai do nosso galpão em Ribeirão Preto é pensado para conversa, música, churrasco e fim de tarde na represa.',
+    'A Fluyr Boats nasceu da Voa Menina com uma ideia simples: barco bom é aquele que junta gente. Por isso cada flutuante e cada pontoon que sai do nosso galpão em Ribeirão Preto é pensado para conversa, música, churrasco e fim de tarde na represa.',
     'Aqui não existe linha de montagem anônima. Os flutuadores são calandrados e soldados à mão, a estrutura é montada no nosso próprio galpão e cada acabamento — estofado, iluminação, bar, guarda-corpo — é escolhido junto com quem vai navegar.',
   ],
   stats: [
@@ -108,7 +108,7 @@ export const glossary = {
   title: 'Fale a língua do mar.',
   text: 'Vai comprar sua primeira embarcação? Estas são as palavras que você mais vai ouvir no estaleiro e no píer.',
   terms: [
-    { term: 'Chalana', text: 'Embarcação de fundo chato, larga e estável, tradicional nos rios e represas brasileiros. Ideal para passeio e lazer em grupo.' },
+    { term: 'Flutuante', text: 'Embarcação de fundo chato, larga e estável, com convés amplo para navegar em rios e represas. Ideal para passeio e lazer em grupo.' },
     { term: 'Pontoon', text: 'Barco apoiado sobre flutuadores tubulares. O convés amplo e plano vira uma verdadeira sala de estar sobre a água.' },
     { term: 'Flutuadores', text: 'Os tubos que ficam sob o convés e garantem a flutuação e a estabilidade de um pontoon.' },
     { term: 'Proa e popa', text: 'Proa é a frente da embarcação; popa, a parte de trás — onde normalmente fica o motor de popa.' },
@@ -116,7 +116,7 @@ export const glossary = {
     { term: 'Convés', text: 'O piso principal da embarcação, onde as pessoas circulam, sentam e se reúnem.' },
     { term: 'Bimini', text: 'Toldo de lona sobre armação metálica que protege o convés do sol e pode ser recolhido.' },
     { term: 'Timão', text: 'O volante da embarcação. Fica no console de comando, junto ao painel.' },
-    { term: 'Calado', text: 'A profundidade que o casco ocupa abaixo da linha d’água. Chalanas e pontoons têm calado pequeno — navegam em águas rasas.' },
+    { term: 'Calado', text: 'A profundidade que o casco ocupa abaixo da linha d’água. Flutuantes e pontoons têm calado pequeno — navegam em águas rasas.' },
     { term: 'Boca', text: 'A largura máxima da embarcação. Junto com o comprimento, define o espaço útil a bordo.' },
     { term: 'Bota-fora', text: 'O momento em que a embarcação recém-construída é lançada na água pela primeira vez.' },
     { term: 'Zarpar', text: 'Soltar as amarras e partir. O que você vai fazer assim que receber a sua Fluyr.' },
@@ -130,6 +130,6 @@ export const contactCopy = {
   note: 'Seus dados não ficam guardados no site: eles vão direto para a conversa com a gente no WhatsApp.',
 }
 
-export const modelOptions = ['Fluyr X 850 (chalana, 8,5 m, até 23 pessoas)', 'Fluyr 950 (pontoon, 9,5 m, até 30 pessoas)', 'Projeto sob medida', 'Ainda não sei']
+export const modelOptions = ['Fluyr X 850 (flutuante, 8,5 m, até 23 pessoas)', 'Fluyr 950 (pontoon, 9,5 m, até 30 pessoas)', 'Projeto sob medida', 'Ainda não sei']
 
 export const useOptions = ['Lazer com a família e amigos', 'Passeios / turismo', 'Eventos a bordo', 'Pesca', 'Outro']

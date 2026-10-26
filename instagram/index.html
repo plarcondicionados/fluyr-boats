@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kit Instagram — Fluyr Boats</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;1,9..144,400&family=JetBrains+Mono:wght@500&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet" />
+<style>
+  :root { --mar:#0b1628; --mar-2:#13223b; --mar-3:#1d3152; --latao:#c8945a; --latao-claro:#e6bd84; --lona:#f4f0e8; --nevoa:#9fb0c8; --linha:rgba(200,148,90,.25); }
+  * { box-sizing: border-box; }
+  body { margin:0; background:var(--mar); color:var(--lona); font-family:Manrope,system-ui,sans-serif; line-height:1.5;
+    background-image: radial-gradient(circle at 15% 0%, #1a2d4d 0, transparent 45%); }
+  .wrap { max-width:1180px; margin:0 auto; padding:0 20px 80px; }
+  header { padding:36px 0 10px; display:flex; flex-wrap:wrap; gap:20px; align-items:center; }
+  header img { height:70px; }
+  .mono { font-family:"JetBrains Mono",monospace; font-size:12px; letter-spacing:.18em; text-transform:uppercase; color:var(--latao-claro); }
+  h1, h2, h3 { font-family:Fraunces,serif; font-weight:500; margin:0; }
+  h1 { font-size:34px; }
+  h2 { font-size:28px; margin:56px 0 8px; }
+  .sub { color:var(--nevoa); max-width:760px; }
+  .grade-feed { display:grid; grid-template-columns:repeat(3,1fr); gap:4px; max-width:420px; margin-top:18px; border-radius:12px; overflow:hidden; border:1px solid var(--linha); }
+  .grade-feed img { width:100%; aspect-ratio:4/5; object-fit:cover; display:block; }
+  .post { margin-top:28px; display:grid; grid-template-columns:minmax(0,1.05fr) minmax(0,1fr); gap:28px; padding:24px; border:1px solid var(--linha); border-radius:20px; background:rgba(19,34,59,.6); }
+  .slides { display:flex; gap:10px; overflow-x:auto; padding-bottom:6px; }
+  .slides a { flex:0 0 auto; width:min(260px,70vw); }
+  .slides img { width:100%; border-radius:10px; display:block; }
+  .meta { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 14px; }
+  .tag { font-size:12px; font-weight:700; padding:5px 11px; border-radius:999px; border:1px solid var(--linha); color:var(--latao-claro); }
+  .tag.data { background:var(--latao); color:var(--mar); border-color:var(--latao); }
+  pre { white-space:pre-wrap; font-family:Manrope,sans-serif; font-size:14.5px; background:rgba(6,13,25,.55); border:1px solid rgba(255,255,255,.06); border-radius:12px; padding:16px; margin:0; max-height:420px; overflow:auto; }
+  button { font:inherit; font-weight:700; font-size:14px; cursor:pointer; border:0; border-radius:999px; padding:10px 18px; background:var(--latao); color:var(--mar); margin-top:12px; }
+  button:hover { background:var(--latao-claro); }
+  .dica { font-size:13px; color:var(--nevoa); margin-top:10px; }
+  .reels { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(300px,100%),1fr)); gap:16px; margin-top:20px; }
+  .card { border:1px solid var(--linha); border-radius:16px; padding:20px; background:rgba(19,34,59,.6); }
+  .card h3 { font-size:22px; margin:6px 0 10px; }
+  .card ol, .card ul { margin:8px 0 0; padding-left:20px; color:#d6dde8; font-size:14.5px; }
+  .card code { font-family:"JetBrains Mono",monospace; font-size:12px; color:var(--latao-claro); }
+  @media (max-width:820px) { .post { grid-template-columns:minmax(0,1fr); padding:16px; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <img src="../src/assets/marca/logo-fluyr-clara.webp" alt="Fluyr Boats" />
+    <div>
+      <p class="mono">Kit de lançamento · @fluyrboats</p>
+      <h1>9 primeiros posts do feed</h1>
+    </div>
+  </header>
+  <p class="sub">As artes estão em <b>instagram/posts/</b> (PNG 1080×1350, formato retrato do feed). Publique na ordem abaixo: foto e tipografia se alternam e, depois do 9º post, o perfil forma um xadrez como o da prévia. Clique em uma arte para abrir em tamanho real.</p>
+
+  <h2>Como o feed vai ficar</h2>
+  <p class="sub">O post mais recente aparece no canto superior esquerdo.</p>
+  <div class="grade-feed" id="feed"></div>
+
+  <h2>Posts, na ordem de publicação</h2>
+  <p class="sub">As datas são sugestão: 3 posts por semana (terça, quinta e sábado), por volta das 18h — horário em que o pessoal planeja o fim de semana na água. Ajuste conforme as métricas do perfil depois das primeiras semanas.</p>
+  <div id="posts"></div>
+
+  <h2>Ideias de Reels com os vídeos que já temos</h2>
+  <p class="sub">Os vídeos originais estão em <b>fotos-originais/</b>. Monte no CapCut ou no próprio Instagram, com áudio em alta e textos curtos na tela. Reels alcançam quem ainda não segue o perfil — vale intercalar um por semana entre os posts.</p>
+  <div class="reels" id="reels"></div>
+
+  <h2>Stories para engajar</h2>
+  <div class="reels" id="stories"></div>
+</div>
+
+<script>
+const ASSINATURA = `\n\n📍 Estaleiro em Ribeirão Preto/SP\n💬 Orçamentos e visitas: WhatsApp (16) 99715-3724`;
+
+const POSTS = [
+  {
+    n: 1, data: 'Ter · 27/10', tipo: 'Foto', slides: ['p01'],
+    legenda: `Prazer, somos a Fluyr Boats. ⚓
+
+Nasceu aqui, num estaleiro em Ribeirão Preto, a vontade de construir barcos que juntam gente: flutuantes e pontoons feitos peça a peça, do primeiro traço do projeto ao dia em que tocam a água.
+
+Neste perfil você vai acompanhar a frota, os bastidores do estaleiro e um pouco da língua do mar — tudo com fotos e vídeos reais dos nossos barcos.
+
+Bem-vindo a bordo. Segue a gente e ativa o sininho 🔔${ASSINATURA}`,
+    tags: '#fluyrboats #flutuante #pontoon #barco #nautica #vidanautica #ribeiraopreto #interiordesaopaulo #estaleiro #represa',
+  },
+  {
+    n: 2, data: 'Qui · 29/10', tipo: 'Tipográfico', slides: ['p02'],
+    legenda: `Flutuante ou pontoon? 🤔
+
+Os dois nasceram para o passeio em grupo, mas o segredo está embaixo do convés:
+
+🔸 Flutuante — casco de fundo chato, largo e estável, com convés amplo para rios e represas. É o caso da nossa Fluyr X 850.
+🔹 Pontoon — o convés fica apoiado sobre flutuadores tubulares, o que libera um espaço amplo e plano a bordo. É o caso da Fluyr 950.
+
+E você, qual combina mais com o seu fim de semana? Conta aqui nos comentários 👇${ASSINATURA}`,
+    tags: '#fluyrboats #flutuante #pontoon #pontoonboat #glossarionautico #nautica #barco #represa #lazernaagua',
+  },
+  {
+    n: 3, data: 'Sáb · 31/10', tipo: 'Carrossel (4)', slides: ['p03-1', 'p03-2', 'p03-3', 'p03-4'],
+    legenda: `Fluyr X 850: o flutuante que assina o próprio nome no céu. ✖️✨
+
+São 8,5 metros e capacidade para até 23 pessoas. O grande X estrutural sustenta o toldo e, contornado por LED, acende ao entardecer — o barco vira ponto de encontro na represa.
+
+A bordo: bar com banquetas, spots no forro do toldo e o casco azul-marinho com a faixa laranja.
+
+Arrasta para o lado e conhece cada detalhe 👉
+
+Quer a sua? Chama no WhatsApp e conta como você imagina o seu convés.${ASSINATURA}`,
+    tags: '#fluyrboats #fluyrx850 #flutuante #barco #barcodefesta #nautica #led #represa #ribeiraopreto #estaleiro',
+  },
+  {
+    n: 4, data: 'Ter · 03/11', tipo: 'Tipográfico', slides: ['p04'],
+    legenda: `Glossário de bordo: bombordo e boreste. 🔴🟢
+
+Olhando para a proa (a frente do barco):
+⬅️ bombordo é o lado esquerdo
+➡️ boreste (ou estibordo) é o lado direito
+
+À noite, as luzes de navegação entregam o lado de cada embarcação: vermelha a bombordo, verde a boreste.
+
+Salva este post para não esquecer na próxima navegada 📌${ASSINATURA}`,
+    tags: '#fluyrboats #glossarionautico #bombordo #boreste #nautica #vidanautica #barco #arrais #dicasnauticas',
+  },
+  {
+    n: 5, data: 'Qui · 05/11', tipo: 'Foto', slides: ['p05'],
+    legenda: `Antes de navegar, ele passou por aqui. 🔧
+
+Cada arco do X da Fluyr X 850 é cortado, soldado e recebe a fita de LED no nosso galpão em Ribeirão Preto. É aqui, entre faíscas e muita mão de obra, que o desenho do barco ganha forma.
+
+Quer ver mais bastidores do estaleiro? Comenta "🔥" que a gente mostra.${ASSINATURA}`,
+    tags: '#fluyrboats #bastidores #estaleiro #feitoamao #solda #flutuante #barco #ribeiraopreto #nautica',
+  },
+  {
+    n: 6, data: 'Sáb · 07/11', tipo: 'Tipográfico', slides: ['p06'],
+    legenda: `Barco bom é aquele que junta gente. ⚓
+
+Conversa, música, churrasco e aquele fim de tarde na represa que ninguém quer que acabe. É para isso que cada Fluyr é construída.
+
+Marca aqui quem estaria a bordo com você 👇${ASSINATURA}`,
+    tags: '#fluyrboats #fimdetarde #represa #lazernaagua #passeiodebarco #amigos #familia #vidanautica #barco',
+  },
+  {
+    n: 7, data: 'Ter · 10/11', tipo: 'Carrossel (4)', slides: ['p07-1', 'p07-2', 'p07-3', 'p07-4'],
+    legenda: `Fluyr 950: uma sala de estar inteira flutuando. 🛥️
+
+São 9,5 metros de pontoon com capacidade para até 30 pessoas. Sofás em U, mesas, bar, churrasqueira em inox e o toldo bimini garantindo a sombra do meio-dia. Na popa, escada para descer direto para a água.
+
+Arrasta para conhecer cada canto do convés 👉
+
+Quer receber a turma toda a bordo? Fala com a gente no WhatsApp.${ASSINATURA}`,
+    tags: '#fluyrboats #fluyr950 #pontoon #pontoonboat #barco #churrasconobarco #represa #nautica #ribeiraopreto #lazernaagua',
+  },
+  {
+    n: 8, data: 'Qui · 12/11', tipo: 'Tipográfico', slides: ['p08'],
+    legenda: `Glossário de bordo: proa e popa. ⛵
+
+➡️ Proa é a frente da embarcação.
+⬅️ Popa é a parte de trás — e é por isso que o motor que fica ali se chama motor de popa.
+
+Qual termo náutico você quer aprender no próximo post? Deixa nos comentários 👇${ASSINATURA}`,
+    tags: '#fluyrboats #glossarionautico #proa #popa #nautica #vidanautica #barco #dicasnauticas #pontoon',
+  },
+  {
+    n: 9, data: 'Sáb · 14/11', tipo: 'Foto', slides: ['p09'],
+    legenda: `Seu barco começa com uma conversa. 💬
+
+Conta pra gente onde você vai navegar, quantas pessoas vão a bordo e como imagina o convés. A partir daí, a gente desenha junto — e você acompanha a construção de perto.
+
+👉 Chama no WhatsApp (16) 99715-3724
+📍 Rua João Guião, 133 — Ribeirão Preto/SP`,
+    tags: '#fluyrboats #flutuante #pontoon #barcosobmedida #estaleiro #ribeiraopreto #interiordesaopaulo #nautica #barco',
+  },
+];
+
+const REELS = [
+  { t: 'O X acende', arquivos: 'video-02, video-22, video-06, video-12', roteiro: ['Abra no X apagado ou já acendendo (1–2 s).', 'Corte seco para o X aceso de perto (video-06).', 'Feche com o letreiro FLUYR BOATS iluminado (video-02 ou video-22).'], texto: 'Texto na tela: "Quando o sol se põe…" → "…o X acende." Legenda curta + CTA para o WhatsApp.' },
+  { t: 'Do alumínio à água', arquivos: 'video-15, video-01, video-10, video-16, video-27', roteiro: ['Chapa sendo calandrada (video-15).', 'Solda do flutuador (video-01).', 'Fechamento e flutuador pronto (video-10, video-16).', 'Corte final: a Fluyr 950 já na água (video-27).'], texto: 'Texto na tela por etapa: "chapa" → "solda" → "flutuador" → "na água". Ótimo com áudio em alta de "transformação".' },
+  { t: 'A represa vista de cima', arquivos: 'video-33 (drone)', roteiro: ['Use 10 a 15 s do drone da Fluyr 950 navegando.', 'Pode ser o primeiro Reels do perfil — é o vídeo mais bonito que temos.'], texto: 'Texto na tela: "Seu fim de semana visto de cima." CTA: "9,5 m · até 30 pessoas".' },
+  { t: 'Tour pelo convés da 950', arquivos: 'video-29, video-28, video-34, video-18', roteiro: ['Convés com a represa ao fundo (video-29).', 'Bar com garrafeiro (video-28).', 'Churrasqueira em inox (video-34).', 'Console e timão (video-18).'], texto: 'Formato "tour": um texto curto por cena (bar · churrasqueira · timão).' },
+  { t: 'Do projeto ao estaleiro', arquivos: 'video-23, video-35, foto-05, foto-14', roteiro: ['Projeto em 3D na tela (video-23).', 'Estrutura e flutuadores no galpão (video-35).', 'Arco do X recebendo LED (foto-05 / foto-14).'], texto: 'Mostra que cada barco começa no projeto. CTA: "Seu projeto pode ser o próximo."' },
+];
+
+const STORIES = [
+  { t: 'Enquete', itens: ['Repostar o post 2 com a enquete "Flutuante ou pontoon?".', 'Usar o resultado como gancho para os carrosséis da X 850 e da 950.'] },
+  { t: 'Caixa de perguntas', itens: ['"Qual termo náutico você quer aprender?" — as respostas viram os próximos posts do Glossário de bordo.'] },
+  { t: 'Bastidores do dia', itens: ['Stories rápidos do galpão (solda, montagem, LED) sem edição — mostram que o estaleiro existe e está trabalhando.', 'Sempre com figurinha de link para o WhatsApp.'] },
+  { t: 'Destaques do perfil', itens: ['Criar os destaques: Fluyr X 850 · Fluyr 950 · Estaleiro · Glossário · Contato.', 'Capas dos destaques no azul-marinho com ícone em latão, seguindo as artes.'] },
+];
+
+// prévia do feed: mais recente primeiro
+document.getElementById('feed').innerHTML = [...POSTS].reverse()
+  .map((p) => `<img src="posts/${p.slides[0]}.png" alt="Post ${p.n}" title="Post ${p.n}">`).join('');
+
+document.getElementById('posts').innerHTML = POSTS.map((p) => {
+  const texto = `${p.legenda}\n\n${p.tags}`;
+  return `
+  <article class="post">
+    <div>
+      <p class="mono">Post ${String(p.n).padStart(2, '0')}</p>
+      <div class="meta"><span class="tag data">${p.data}</span><span class="tag">${p.tipo}</span><span class="tag">${p.slides.map((s) => s + '.png').join(' · ')}</span></div>
+      <div class="slides">${p.slides.map((s) => `<a href="posts/${s}.png" target="_blank"><img src="posts/${s}.png" alt="${s}"></a>`).join('')}</div>
+    </div>
+    <div>
+      <pre id="leg-${p.n}">${texto.replace(/</g, '&lt;')}</pre>
+      <button type="button" data-copiar="leg-${p.n}">Copiar legenda + hashtags</button>
+    </div>
+  </article>`;
+}).join('');
+
+document.getElementById('reels').innerHTML = REELS.map((r, i) => `
+  <div class="card"><p class="mono">Reels ${i + 1}</p><h3>${r.t}</h3><p><code>${r.arquivos}</code></p>
+  <ol>${r.roteiro.map((x) => `<li>${x}</li>`).join('')}</ol><p class="dica">${r.texto}</p></div>`).join('');
+
+document.getElementById('stories').innerHTML = STORIES.map((s) => `
+  <div class="card"><h3>${s.t}</h3><ul>${s.itens.map((x) => `<li>${x}</li>`).join('')}</ul></div>`).join('');
+
+document.addEventListener('click', async (e) => {
+  const id = e.target.dataset?.copiar;
+  if (!id) return;
+  const texto = document.getElementById(id).textContent;
+  try { await navigator.clipboard.writeText(texto); }
+  catch {
+    const t = document.createElement('textarea'); t.value = texto; document.body.appendChild(t); t.select();
+    document.execCommand('copy'); t.remove();
+  }
+  const antes = e.target.textContent; e.target.textContent = 'Copiado ✓';
+  setTimeout(() => (e.target.textContent = antes), 1600);
+});
+</script>
+</body>
+</html>
