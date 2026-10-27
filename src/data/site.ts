@@ -44,7 +44,7 @@ export const trackedSections = ['inicio', ...navItems.map((n) => n.id)]
 
 export const hero = {
   kicker: 'Estaleiro · Ribeirão Preto/SP',
-  title: ['Feitos para singrar.', 'Desenhados para reunir.'],
+  title: ['Feitos para navegar.', 'Desenhados para reunir.'],
   text:
     'Flutuantes e pontoons construídos peça a peça no nosso estaleiro — do primeiro traço do projeto ao dia em que o barco toca a água pela primeira vez.',
   primaryCta: 'Conheça nossos flutuantes e pontoons',
