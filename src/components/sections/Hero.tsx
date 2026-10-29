@@ -28,8 +28,8 @@ export const Hero = () => {
       <motion.div style={{ y, scale: escala }} className="absolute inset-0">
         {capaVideo ? (
           <video
-            src="/videos/hero.mp4"
-            poster="/videos/hero.jpg"
+            src={`${import.meta.env.BASE_URL}videos/hero.mp4`}
+            poster={`${import.meta.env.BASE_URL}videos/hero.jpg`}
             autoPlay
             muted
             loop

@@ -3,6 +3,9 @@ import react from '@vitejs/plugin-react'
 import path from 'node:path'
 
 export default defineConfig({
+  // Caminhos relativos: o mesmo build funciona em plarcondicionados.github.io/fluyr-boats/
+  // e na raiz de um domínio próprio, sem reconfigurar nada.
+  base: './',
   plugins: [react()],
   resolve: {
     alias: {

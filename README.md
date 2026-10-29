@@ -72,11 +72,25 @@ Os botões de modelo já abrem a conversa citando o barco ("Vi a Fluyr X 850 no 
 - A **logo** veio do PDF `Fluyr_Boats_Logo_Alta_Qualidade.pdf`. O xadrez cinza desenhado atrás dela foi removido, e foi criada uma
   versão clara (azul → creme, latão mantido) para ficar legível sobre o fundo azul-marinho do site.
 
-## Publicar no Render
+## Hospedagem (GitHub Pages — gratuita)
 
-O `render.yaml` já configura o site estático. No Render: **New + → Blueprint → escolher o repositório → Apply**.
-O `.gitignore` deixa de fora o `.zip` e os vídeos brutos de `fotos-originais/` (pesados demais para o GitHub);
-os vídeos já convertidos em `public/videos/` vão junto.
+O site é publicado automaticamente pelo GitHub Pages a cada push na branch `main`
+(workflow em `.github/workflows/deploy.yml`). Endereço: https://plarcondicionados.github.io/fluyr-boats/
+
+O build usa caminhos relativos (`base: './'` no `vite.config.ts`), então funciona tanto nesse endereço
+quanto na raiz de um domínio próprio, sem mudar nada no código.
+
+### Ligar um domínio próprio (ex.: fluyrboats.com.br)
+
+1. Compre o domínio (Registro.br para `.com.br`, ou Hostinger/GoDaddy/Cloudflare para `.com`).
+2. No painel do domínio, crie os registros DNS:
+   - **A** para o domínio raiz (`@`): `185.199.108.153`, `185.199.109.153`, `185.199.110.153`, `185.199.111.153`
+   - **CNAME** para `www`: `plarcondicionados.github.io`
+   (no Registro.br: "Editar zona" / "Configurar endereçamento"; se ele pedir servidores DNS, use os próprios do Registro.br.)
+3. No GitHub: repositório → **Settings → Pages → Custom domain** → digite o domínio → **Save**.
+4. Quando o DNS propagar (de minutos a algumas horas), marque **Enforce HTTPS**.
+
+O arquivo `render.yaml` ficou de uma hospedagem anterior no Render e não é mais usado.
 
 ## Pendências (dados para confirmar com a Fluyr Boats)
 

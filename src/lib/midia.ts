@@ -18,6 +18,9 @@ export type SecaoMidia = 'destaque' | 'fluyr-x' | 'fluyr-950' | 'acessorios' | '
 
 const fotos = import.meta.glob<string>('../assets/fotos/*.webp', { eager: true, import: 'default' })
 
+/** Vídeos ficam em public/videos; BASE_URL ("./") mantém o caminho relativo à página. */
+const VIDEOS = `${import.meta.env.BASE_URL}videos`
+
 const urlDaFoto = (id: string): string | undefined => fotos[`../assets/fotos/${id}.webp`]
 
 export const midia = (id: string): Midia | null => {
@@ -26,7 +29,7 @@ export const midia = (id: string): Midia | null => {
   const proporcao = w / h
 
   if (id.startsWith('video-')) {
-    return { id, tipo: 'video', src: `/videos/${id}.jpg`, video: `/videos/${id}.mp4`, legenda, proporcao }
+    return { id, tipo: 'video', src: `${VIDEOS}/${id}.jpg`, video: `${VIDEOS}/${id}.mp4`, legenda, proporcao }
   }
 
   const src = urlDaFoto(id)
